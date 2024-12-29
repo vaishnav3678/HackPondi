@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Water Usage Tracker with Simulated Sensor</title>
+<link rel="stylesheet" href="color.css">
+<style>
+body {
+    font-family: sans-serif;
+    text-align: center;
+}
+table {
+    border-collapse: collapse;
+    margin: 20px auto;
+}
+th, td {
+    border: 1px solid #ddd;
+    padding: 10px;
+}
+th {
+    background-color: #f2f2f2;
+}
+button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+input[type="month"] {
+    padding: 5px;
+    margin: 5px;
+}
+</style>
+</head>
+<body>
+
+<h1>Water Usage Tracker with Simulated Sensor</h1>
+
+<table>
+<tr>
+    <th>Timestamp</th>
+    <th>Units Used (Liters)</th>
+</tr>
+<tr>
+    <td id="timestamp"></td>
+    <td id="units"></td>
+</tr>
+</table>
+
+<label for="selectedMonth">Select Month:</label>
+<input type="month" id="selectedMonth">
+
+<button onclick="generateBill()">Generate Bill</button>
+
+<p id="result"></p>
+
+<script>
+let totalUnits = 0;
+let unitPrice = 0.10; // Example unit price in Indian Rupees (adjust as needed)
+let usageData = []; // Store simulated usage data
+
+function getSimulatedSensorData(timestamp) {
+    // Simulate random water usage (replace with actual sensor logic)
+    // Generate data every minute within an hour
+    var randomLiters = Math.random() * 0.1; // Random usage between 0 and 0.1 liters per minute
+    return randomLiters;
+}
+
+// Simulate initial data for the past week with minute-by-minute readings
+const today = new Date();
+for (let i = 0; i < 7 * 24 * 60; i++) { // 7 days * 24 hours * 60 minutes
+    const date = new Date(today);
+    date.setMinutes(today.getMinutes() - i);
+    const timestamp = date.toLocaleString();
+    const minuteUsage = getSimulatedSensorData(timestamp);
+    usageData.push({ timestamp: timestamp, units: minuteUsage });
+}
+
+function calculateBill(selectedMonth) {
+    totalUnits = 0;
+
+    // Filter usage data within the specified month
+    const filteredData = usageData.filter(data => {
+        const dataDate = new Date(data.timestamp);
+        const selectedMonthDate = new Date(selectedMonth);
+        return dataDate.getMonth() === selectedMonthDate.getMonth() && 
+               dataDate.getFullYear() === selectedMonthDate.getFullYear(); 
+    });
+
+    // Calculate total units used within the month
+    filteredData.forEach(data => {
+        totalUnits += data.units;
+    });
+
+    var totalCost = totalUnits * unitPrice;
+
+    document.getElementById("result").innerHTML =
+        "Total Units Used: " + totalUnits.toFixed(2) + " liters<br>" +
+        "Unit Price: ₹" + unitPrice.toFixed(2) + "/liter<br>" +
+        "Total Cost: ₹" + totalCost.toFixed(2);
+}
+
+function generateBill() {
+    const selectedMonth = document.getElementById("selectedMonth").value;
+
+    if (selectedMonth) {
+        calculateBill(selectedMonth);
+    } else {
+        alert("Please select a month.");
+    }
+}
+
+</script>
+
+</body>
+</html>

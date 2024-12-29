@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Wallet</title>
+    <style>
+        :root {
+            --primary-color:  #e0ecf2 ;
+            --bg-color:  #07203d;
+            --btn-color:  #15262e;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: var(--primary-color);
+            color: var(--bg-color);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .wallet-container {
+            background: var(--btn-color);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.6);
+            text-align: center;
+            width: 320px;
+        }
+
+        h1 {
+            color: white;
+            margin-bottom: 20px;
+            font-size: 28px;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
+        }
+
+        .balance {
+            margin-bottom: 20px;
+        }
+
+        #balance {
+            color: #00ff00;
+            font-weight: bold; 
+            font-size: 24px;
+            text-shadow: 1px 1px 5px rgba(0, 255, 0, 0.7);
+            animation: glow 1.5s infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                text-shadow: 1px 1px 5px rgba(0, 255, 0, 0.7);
+            }
+            to {
+                text-shadow: 0 0 20px rgba(0, 255, 0, 1), 0 0 30px rgba(0, 255, 0, 0.7);
+            }
+        }
+
+        .transaction {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        input[type="number"] {
+            padding: 12px;
+            border: 2px solid var(--bg-color);
+            border-radius: 8px;
+            background: var(--primary-color);
+            color: var(--bg-color);
+            font-size: 16px;
+            outline: none;
+        }
+
+        input[type="number"]::placeholder {
+            color: #888888;
+        }
+
+        .btn {
+            padding: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            background: rgb(133,171,254);
+            color: var(--primary-color);
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            transition: transform 0.2s, background 0.3s;
+        }
+
+        .btn:hover {
+            background: green;
+            transform: scale(1.1);
+            color: white;
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        } 
+        h2{
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="wallet-container">
+        <h1>My Wallet</h1>
+        <div class="balance">
+            <h2>Balance: <span id="balance" class="balance-animate">0.00</span> USD</h2>
+        </div>
+        <div class="transaction">
+            <input type="number" id="amount" placeholder="Enter amount">
+            <button class="btn" onclick="addMoney()">Add Money</button>
+            <button class="btn" onclick="withdrawMoney()">Withdraw Money</button>
+        </div>
+    </div>
+    <script>
+        let balance = 0;function addMoney() {
+            const amount = parseFloat(document.getElementById('amount').value);
+            if (isNaN(amount) || amount <= 0) {
+                alert('Please enter a valid amount');
+                return;
+            }
+            balance += amount;
+            updateBalance();
+            document.getElementById('amount').value = '';
+        }
+
+        function withdrawMoney() {
+            const amount = parseFloat(document.getElementById('amount').value);
+            if (isNaN(amount) ||  amount <= 0) {
+                alert('Please enter a valid amount');
+                return;
+            }
+            if (amount > balance) {
+                alert('Insufficient balance');
+                return;
+            }
+            balance -= amount;
+            updateBalance();
+            document.getElementById('amount').value = '';
+        }
+
+        function updateBalance() {
+            document.getElementById('balance').textContent = balance.toFixed(2);
+        }
+    </script>
+</body>
+</html>
